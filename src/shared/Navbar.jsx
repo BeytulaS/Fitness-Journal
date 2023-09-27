@@ -4,9 +4,11 @@ import { FaDumbbell } from "react-icons/fa";
 import { BsFillPersonFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useUser } from "../providers/userProvider";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { currentUser, signOut } = useUser();
 
   return (
     <header>
@@ -35,7 +37,11 @@ export default function Navbar() {
             </Link>
           </div>
         </div>
-        <Link>Sign Up</Link>
+        {currentUser ? (
+          <button onClick={signOut}>Sign Out</button>
+        ) : (
+          <Link to="/sign-in">Sign In</Link>
+        )}
       </nav>
     </header>
   );
