@@ -15,10 +15,8 @@ export default function AuthPage() {
     e.preventDefault();
 
     if (formType === "sign-in") {
-      console.log("sign in");
       handleSignIn(credentials);
     } else {
-      console.log("sign up");
       handleSignUp(credentials);
     }
   };
