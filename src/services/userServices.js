@@ -1,8 +1,9 @@
-import { auth } from "../firebase/firebase";
+import { auth, db } from "../firebase/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore/lite";
 
 // This function is used to create a new user in Firebase
 const handleSignUp = async (creditentials) => {
@@ -13,10 +14,16 @@ const handleSignUp = async (creditentials) => {
   )
     .then((userCredential) => {
       const user = userCredential.user;
+      setDoc(doc(db, "users", `${user.uid}`), {
+        email: user.email,
+        uid: user.uid,
+      });
+      console.log("success");
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
     });
 };
 
@@ -29,6 +36,8 @@ const handleSignIn = async (creditentials) => {
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+
+      console.log(errorCode, errorMessage);
     });
 };
 

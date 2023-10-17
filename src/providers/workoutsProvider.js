@@ -1,6 +1,7 @@
 import { useContext, createContext } from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import LoadingPage from "../shared/LoadingPage";
 
 const ExercisesContext = createContext();
 
@@ -19,11 +20,30 @@ export function ExercisesProvider({ children }) {
       );
       const results = res.data.results;
 
-      const filteredResults = results.filter((result) => {
+      const englishExercises = results.filter((result) => {
         return result.exercises[0].language === 2;
       });
 
-      setExercises(filteredResults);
+      console.log(englishExercises);
+
+      const filteredExercises = englishExercises.map((exercise) => {
+        return {
+          id: exercise.id,
+          uuid: exercise.uuid,
+          created: exercise.created,
+          last_update: exercise.last_update,
+          category: exercise.category.name,
+          muscles: exercise.muscles,
+          muscles_secondaty: exercise.muscles_secondary,
+          equipment: exercise.equipment[0]?.name,
+          images: exercise.images,
+          videos: exercise.videos,
+          name: exercise.exercises[0].name,
+          description: exercise.exercises[0].description,
+        };
+      });
+
+      setExercises(filteredExercises);
 
       setLoading(false);
     } catch (error) {
@@ -43,7 +63,7 @@ export function ExercisesProvider({ children }) {
 
   return (
     <ExercisesContext.Provider value={value}>
-      {!loading && children}
+      {loading ? <LoadingPage /> : children}
     </ExercisesContext.Provider>
   );
 }
